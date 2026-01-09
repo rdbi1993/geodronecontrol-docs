@@ -16,17 +16,17 @@ All factions:
 
 Kill the bot! - destroy 1000 Machina portals
 
-<h1>Headings</h1>
+<h1>Medalist</h1>
 <strong>
   <ul>
-    <li><a href="#one">What is Lorem Ipsum?</a></li>
-    <li><a href="#two">Why do we use it?</a></li>
-    <li><a href="#three">Where does it come from?</a></li>
-    <li><a href="#four">Where can I get some?</a></li>
+    <li><a href="#one">About</a></li>
+    <li><a href="#two">Functions</a></li>
+    <li><a href="#three">Medals</a></li>
+    <li><a href="#four">Events</a></li>
   </ul>
 </strong>
 <h1>Content</h1>
-<h3 id="one">What is Lorem Ipsum?</h3>
+<h3 id="one">About</h3>
 <p>
   Lorem Ipsum is simply dummy text of the printing and typesetting industry.
   Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
@@ -38,7 +38,7 @@ Kill the bot! - destroy 1000 Machina portals
   including versions of Lorem Ipsum.
 </p>
 
-<h3 id="two">Why do we use it?</h3>
+<h3 id="two">Functions</h3>
 <p>
   It is a long-established fact that a reader will be distracted by the readable
   content of a page when looking at its layout. The point of using Lorem Ipsum
@@ -50,7 +50,7 @@ Kill the bot! - destroy 1000 Machina portals
   sometimes by accident, sometimes on purpose (injected humor and the like).
 </p>
 
-<h3 id="three">Where does it come from?</h3>
+<h3 id="three">Medals</h3>
 <p>
   Contrary to popular belief, Lorem Ipsum is not simply random text. It has
   roots in a piece of classical Latin literature from 45 BC, making it over 2000
@@ -71,7 +71,7 @@ Kill the bot! - destroy 1000 Machina portals
   accompanied by English versions from the 1914 translation by H. Rackham.
 </p>
 
-<h3 id="four">Where can I get some?</h3>
+<h3 id="four">Events</h3>
 <p>
   There are many variations of passages of Lorem Ipsum available, but the
   majority have suffered alteration in some form, by injected humor, or
