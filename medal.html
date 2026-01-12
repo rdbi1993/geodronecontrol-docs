@@ -169,25 +169,6 @@
       max-height: 80vh;
       overflow-y: auto;
     }
-
-    /* Table Styling for Stats */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-      text-align: left;
-    }
-
-    table th,
-    table td {
-      padding: 8px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    table th {
-      background-color: #0583D2;
-      color: white;
-    }
   </style>
 </head>
 <body>
@@ -285,8 +266,90 @@
     const statsInput = document.getElementById("stats-input");
     const saveStatsBtn = document.getElementById("save-stats-btn");
 
-    const statsSection = document.getElementById("stats-section");
+  const statsSection = document.getElementById("stats-section");
     const statsList = document.getElementById("stats-list");
+  
+    // Sign Up Logic
+    signupButton.addEventListener("click", function() {
+      loginForm.style.display = "none";
+      createAcctForm.style.display = "block";
+    });
+
+    returnBtn.addEventListener("click", function() {
+      loginForm.style.display = "block";
+      createAcctForm.style.display = "none";
+    });
+
+    createAcctBtn.addEventListener("click", function() {
+      const email = document.getElementById("email-signup").value;
+      const confirmEmail = document.getElementById("confirm-email-signup").value;
+      const password = document.getElementById("password-signup").value;
+      const confirmPassword = document.getElementById("confirm-password-signup").value;
+
+      if (email !== confirmEmail) {
+        alert("Email fields do not match.");
+        return;
+      }
+      if (password !== confirmPassword) {
+        alert("Password fields do not match.");
+        return;
+      }
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          alert("Account created successfully!");
+          loginForm.style.display = "block";
+          createAcctForm.style.display = "none";
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    });
+
+    // Login Logic
+    submitButton.addEventListener("click", function() {
+      const email = emailInput.value;
+      const password = passwordInput.value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          window.location.href = "#";
+        })
+        .catch((error) => {
+          alert("Login failed: " + error.message);
+        });
+    });
+
+    // Real-Time Stats Update
+    function loadPlayerStats(user) {
+      const userId = user.uid;
+      const statsRef = ref(database, 'players/' + userId);
+      
+      // Using onValue to listen to real-time updates
+      onValue(statsRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const stats = snapshot.val();
+          userStats.textContent = `Stats: ${stats}`;
+        } else {
+          userStats.textContent = "No stats available.";
+        }
+      });
+    }
+
+  // Render Stats Vertically as a List
+    function renderStats(statsText) {
+      const rows = statsText.split('\n');
+      const statNames = rows[0].split('\t');
+      const statValues = rows[1].split('\t');
+
+      statsList.innerHTML = ''; // Clear previous stats
+
+      statNames.forEach((name, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="stat-name">${name}:</span> <span class="stat-value">${statValues[index]}</span>`;
+        statsList.appendChild(li);
+      });
+    }
   
     // Save Stats Button (Save full stats)
     saveStatsBtn.addEventListener("click", function() {
@@ -314,51 +377,6 @@
           });
       }
     });
-
-    // Render Stats in a Table Format
-    function renderStats(statsText) {
-      const rows = statsText.split('\n');
-      const statNames = rows[0].split('\t');
-      const statValues = rows[1].split('\t');
-
-      // Create a table to display the stats
-      let tableHTML = `<table>
-                        <thead>
-                            <tr>
-                                <th>Stat Name</th>
-                                <th>Stat Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
-
-      statNames.forEach((name, index) => {
-        tableHTML += `<tr>
-                        <td>${name}</td>
-                        <td>${statValues[index]}</td>
-                      </tr>`;
-      });
-
-      tableHTML += `</tbody></table>`;
-
-      // Display the table inside the user stats section
-      userStats.innerHTML = tableHTML;
-    }
-
-    // Real-Time Stats Update
-    function loadPlayerStats(user) {
-      const userId = user.uid;
-      const statsRef = ref(database, 'players/' + userId);
-      
-      // Using onValue to listen to real-time updates
-      onValue(statsRef, (snapshot) => {
-        if (snapshot.exists()) {
-          const stats = snapshot.val();
-          renderStats(stats); // Call renderStats to display the stats as a table
-        } else {
-          userStats.innerHTML = "No stats available.";
-        }
-      });
-    }
 
     // Auth State Changed (Handle after login)
     onAuthStateChanged(auth, (user) => {
