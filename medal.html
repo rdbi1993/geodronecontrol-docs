@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medalist</title>
+  <style>
+    /* General reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+
+    /* Body styles */
+    body {
+      background-color: #0583D2;
+      font-family: "Arial", sans-serif;
+    }
+
+    /* Heading Styles */
+    h1 {
+      margin-bottom: 8%;
+      text-align: center;
+      font-family: "Fredoka One", cursive;
+      color: #0583D2;
+      letter-spacing: 0.1em;
+    }
+
+    /* Paragraph Styling */
+    p {
+      margin-top: 5%;
+      margin-bottom: 5%;
+      width: 100%;
+      text-align: center;
+      border-bottom: 1px solid #000;
+      line-height: 0.1em;
+    }
+
+    p span {
+      background: #fff;
+      padding: 0 10px;
+    }
+
+    /* Form Elements */
+    input {
+      margin-bottom: 3%;
+    }
+
+    input:last-of-type {
+      margin-bottom: 0;
+    }
+
+    input, button {
+      padding: 3%;
+      width: 100%;
+    }
+
+    /* Login Container Styles */
+    .login-container {
+      background-color: white;
+      padding: 7%;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      width: 60vw;
+      margin-left: 20vw;
+      height: 70vh;
+      margin-top: 15vh;
+    }
+
+    #submit, #create-acct-btn {
+      background-color: #0583D2;
+      color: white;
+      border: none;
+      margin-top: 5%;
+    }
+
+    button:hover {
+      cursor: pointer;
+      opacity: 0.8;
+      transition: 0.3s;
+    }
+
+    /* User Panel Styles */
+    .user-panel-container {
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 60vw;
+      margin: 10vh auto;
+      text-align: center;
+    }
+
+    button {
+      background-color: #0583D2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    #user-stats {
+      margin-top: 20px;
+    }
+
+    /* Form for custom stat input */
+    .upgrade-stats-form {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .upgrade-stats-form textarea {
+      width: 90%;
+      height: 200px;
+      margin-bottom: 20px;
+    }
+
+    .upgrade-stats-form button {
+      width: 100%;
+    }
+  
+ /* Stats Section */
+    .stats-section {
+      display: none;
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 60vw;
+      margin: 10vh auto;
+      text-align: center;
+    }
+
+    /* Display stats vertically */
+    .stats-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+
+    .stats-list li {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .stats-list li:last-child {
+      border-bottom: none;
+    }
+
+    .stats-list .stat-name {
+      font-weight: bold;
+      color: #0583D2;
+    }
+
+    .stats-list .stat-value {
+      margin-left: 10px;
+    }
+
+    /* Scrollable stats if necessary */
+    .stats-section {
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    /* Table Styling for Stats */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    table th,
+    table td {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+      background-color: #0583D2;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Form -->
+  <div class="login-container" id="login-form">
+    <h1>Medalist</h1>
+    <input id="email" type="text" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+    <button id="submit">Login</button>
+    <p><span>or</span></p>
+    <button id="sign-up">Sign Up</button>
+  </div>
+
+  <!-- Create Account Form -->
+  <div class="login-container" id="create-acct-form" style="display:none;">
+    <h1>Create an Account</h1>
+    <input id="email-signup" type="text" placeholder="Email *">
+    <input id="confirm-email-signup" type="email" placeholder="Confirm Email *">
+    <input id="password-signup" type="password" placeholder="Password *">
+    <input id="confirm-password-signup" type="password" placeholder="Confirm Password *">
+    <button id="create-acct-btn">Create Account</button>
+    <button id="return-btn">Return to Login</button>
+  </div>
+
+  <!-- User Panel -->
+  <div class="user-panel-container" id="user-panel" style="display:none;">
+    <h1>Welcome, <span id="user-name"></span></h1>
+    <p>Your email: <span id="user-email"></span></p>
+    <button id="view-stats-btn">View Stats</button>
+   
+    <ul class="stats-list" id="user-stats"></ul>
+    <button id="upgrade-stats-btn">Upgrade Stats</button>
+    <button id="logout-btn">Logout</button>
+
+    <!-- Form to enter custom stats -->
+    <div class="upgrade-stats-form" id="upgrade-stats-form">
+      <h3>Paste your stats below:</h3>
+      <textarea id="stats-input" placeholder="Paste your stats here..."></textarea>
+      <button id="save-stats-btn">Save Stats</button>
+    </div>
+  </div>
+
+   <!-- Stats Section -->
+  <div class="stats-section" id="stats-section">
+    <h3>Your Stats:</h3>
+    <pre id="user-stats"></pre>
+    <button id="back-to-panel-btn">Back to User Panel</button>
+  </div>
+  
+  <script type="module">
+    // Firebase Imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+    // Firebase Config and Initialization
+    const firebaseConfig = {
+      apiKey: "AIzaSyB6vi4UpPVhzcXEttDcIzt6oROOzg_clQs",
+      authDomain: "medalist-gress.firebaseapp.com",
+      databaseURL: "https://medalist-gress-default-rtdb.firebaseio.com",
+      projectId: "medalist-gress",
+      storageBucket: "medalist-gress.firebasestorage.app",
+      messagingSenderId: "1082582337680",
+      appId: "1:1082582337680:web:89fe91b7f5c64f243cb015",
+      measurementId: "G-Z9ZS07NCK6"
+    };
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    // UI Elements
+    const loginForm = document.getElementById("login-form");
+    const createAcctForm = document.getElementById("create-acct-form");
+    const userPanel = document.getElementById("user-panel");
+    const submitButton = document.getElementById("submit");
+    const signupButton = document.getElementById("sign-up");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
+    const createAcctBtn = document.getElementById("create-acct-btn");
+    const returnBtn = document.getElementById("return-btn");
+
+    const viewStatsBtn = document.getElementById("view-stats-btn");
+    const upgradeStatsBtn = document.getElementById("upgrade-stats-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    const userName = document.getElementById("user-name");
+    const userEmail = document.getElementById("user-email");
+    const userStats = document.getElementById("user-stats");
+
+    const upgradeStatsForm = document.getElementById("upgrade-stats-form");
+    const statsInput = document.getElementById("stats-input");
+    const saveStatsBtn = document.getElementById("save-stats-btn");
+
+    const statsSection = document.getElementById("stats-section");
+    const statsList = document.getElementById("stats-list");
+  
+    // Save Stats Button (Save full stats)
+    saveStatsBtn.addEventListener("click", function() {
+      const statsText = statsInput.value;
+      if (!statsText) {
+        alert("Please paste your stats.");
+        return;
+      }
+
+      const user = auth.currentUser;
+      if (user) {
+        const userId = user.uid;
+        const statsRef = ref(database, 'players/' + userId);
+
+        // Save the full stats text into Firebase
+        set(statsRef, statsText)
+          .then(() => {
+            alert("Stats saved successfully!");
+            upgradeStatsForm.style.display = "none";
+            userStats.style.display = "block";
+            loadPlayerStats(user); // Reload the stats
+          })
+          .catch((error) => {
+            alert("Error saving stats: " + error.message);
+          });
+      }
+    });
+
+    // Render Stats in a Table Format
+    function renderStats(statsText) {
+      const rows = statsText.split('\n');
+      const statNames = rows[0].split('\t');
+      const statValues = rows[1].split('\t');
+
+      // Create a table to display the stats
+      let tableHTML = `<table>
+                        <thead>
+                            <tr>
+                                <th>Stat Name</th>
+                                <th>Stat Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+      statNames.forEach((name, index) => {
+        tableHTML += `<tr>
+                        <td>${name}</td>
+                        <td>${statValues[index]}</td>
+                      </tr>`;
+      });
+
+      tableHTML += `</tbody></table>`;
+
+      // Display the table inside the user stats section
+      userStats.innerHTML = tableHTML;
+    }
+
+    // Real-Time Stats Update
+    function loadPlayerStats(user) {
+      const userId = user.uid;
+      const statsRef = ref(database, 'players/' + userId);
+      
+      // Using onValue to listen to real-time updates
+      onValue(statsRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const stats = snapshot.val();
+          renderStats(stats); // Call renderStats to display the stats as a table
+        } else {
+          userStats.innerHTML = "No stats available.";
+        }
+      });
+    }
+
+    // Auth State Changed (Handle after login)
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loginForm.style.display = "none";
+        createAcctForm.style.display = "none";
+        userPanel.style.display = "block";
+
+        userName.textContent = user.displayName || "User";
+        userEmail.textContent = user.email;
+
+        // View Stats Button (Fetch and display stats only when clicked)
+        viewStatsBtn.addEventListener("click", function() {
+          loadPlayerStats(user);
+        });
+
+        // Upgrade Stats Button (Display the form for entering new stats)
+        upgradeStatsBtn.addEventListener("click", function() {
+          upgradeStatsForm.style.display = "block";
+          userStats.style.display = "none";
+        });
+
+        // Logout Button
+        logoutBtn.addEventListener("click", function() {
+          signOut(auth).then(() => {
+            userPanel.style.display = "none";
+            loginForm.style.display = "block";
+          }).catch((error) => {
+            alert("Logout failed: " + error.message);
+          });
+        });
+
+      } else {
+        loginForm.style.display = "block";
+        createAcctForm.style.display = "none";
+        userPanel.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
